@@ -1,0 +1,70 @@
+/* table{
+    border: 1px solid #900;
+    border-collapse: collapse;
+}
+table,tr,td {
+    border: 1px solid gray;
+}
+td {
+    padding: 10px;
+}
+.t1{
+    border: transparent;
+}
+#form{
+    width: 400px;
+    margin-left: 40%;
+    margin-top: 10%;
+    border: 1px solid salmon;
+    background-color: orange;
+    padding:30px;
+} 
+label{
+    width: 100px;
+    text-align: left;
+    margin: 4px;
+}*/
+.in{
+    display: inline-block;
+    width: 200px;
+    border-radius: 10px;
+    margin: 4px;
+}
+.submit{
+    border: none;
+    background-color: blue;
+    color: white;
+    border-radius: 10px;
+    padding: 8px;
+    text-align: center;
+    margin-top: 10px;
+    margin-left: 30%;
+} 
+
+/* viewComponent css */
+#form1{
+    width: 500px;
+    margin-left: 30%;
+    margin-top: 5%;
+    font-size: medium;
+    border: 1px solid salmon;
+    background-color: orange;
+    padding:30px; 
+    border-radius: 10px;
+}
+
+/* addComponents */
+#form{
+    width: 400px;
+    margin-left: 40%;
+    margin-top: 10%;
+    border: 1px solid salmon;
+    background-color: orange;
+    padding:30px;
+} 
+label{
+    width: 100px;
+    text-align: left;
+    margin: 4px;
+}
+     

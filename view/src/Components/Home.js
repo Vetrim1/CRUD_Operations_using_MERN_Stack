@@ -1,0 +1,154 @@
+import React,{useState} from "react";
+import axios from "axios";
+import {Link,useNavigate} from "react-router-dom";
+import {Tooltip} from 'react-tooltip';
+import { toast } from "react-toastify";
+import Footer from "./Footer";
+import "./Table.css"
+
+
+const Home=()=>{
+    const [Post, setPost] = useState([]);
+    const [ Input, setInput] = useState('')
+
+    
+
+    axios.get('http://localhost:8900/users')
+      .then((res) => {
+        setTimeout(()=>{
+        setPost(res.data.userList);
+      },1000)
+      })
+      .catch((err) => console.log(err));
+  
+
+var handler=(event)=>{setInput(event.target.value)}
+
+  var submit=()=>{ 
+    let arr;
+       arr= Post.filter(item=>
+          item==''?item:item.name.toLowerCase().includes(Input.toLowerCase())
+        )
+        setPost(arr)
+  }
+
+let [users,setUsers]=useState([]);
+let [fill,setFill]=useState([]);
+
+let navigate=useNavigate();
+
+let handleEdit=(id)=>{
+    axios.get(`http://localhost:8900/user/${id}`)
+     .then(res=>{
+        setUsers(res.data.userList )
+        console.log(res.data.userList);
+    })
+    navigate(`/edit/${id}`)
+    }
+
+    let handleView=(id)=>{
+        let filterData= users.filter(a=>a._id==id);
+        setFill(filterData)
+        navigate(`/view/${id}`)
+     }
+ 
+     let handleDelete=(id)=>{
+         if(window.confirm("Are you sure")){
+          axios.delete(`http://localhost:8900/user/${id}`)
+          .then(res=>{
+             console.log(res.data);
+             toast.success(res.data.message)
+         })
+          .catch(err=>console.log(err))
+         
+         }
+          
+     }
+
+
+
+
+    return(
+    <>
+    
+    <div className="container mt-4">
+  <div className="row">
+  <div className="col-sm-12 col-12">
+ 
+ <div>
+<div className=" d-flex justify-content-between">
+  <h5  className="col-sm-3">Customer Details</h5>
+
+ 
+  <div className="input-group mb-3  col-sm-4" style={{width:"50%"}}>
+    <input type="search" className="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2" onChange={handler}/>
+    <div className="input-group-append">
+      <button className="btn btn-primary"onSubmit={submit}  type="button">Search</button>
+    </div>
+  </div>
+</div>
+    
+    <Link to="/add"><button data-tooltip-id="create" data-tooltip-content="Create" type="button" className="btn btn-success"><i className="bi bi-person-fill-add"></i>  AddUser</button></Link>
+    <br/>
+
+    
+    <div className="table-respnsive">
+    {/* <marquee width="80%" style={{marginLeft:"100px",color:"green",fontSize:"14px"}} Scrollamount="10">I done CRUD operations (View,Delete,Create,Update).Thank you Aagnia giving me this Opportunity to prove myself....</marquee> */}
+           
+            <table className=" justify-content-between container table table-bordered  table-hover">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Pincode</th>
+                    <th>Country</th>
+                    <th className="t1">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {Post.filter(a=>
+          a==''?a:a.name.toLowerCase().includes(Input.toLowerCase()))
+          .map((a,i)=>{
+               
+               return <tr key={i}>
+                    <td>{++i}</td>
+                    <td>{a.name}</td>
+                    <td>{a.email}</td>
+                    <td>{a.address}</td>
+                    <td>{a.city}</td>
+                    <td>{a.pincode}</td>
+                    <td>{a.country}</td>
+                    <td className="t1" >
+                        <div class="btn-group" role="group" >
+                        <Link to={`/edit/${a._id}`}><button data-tooltip-id="edit" data-tooltip-content="Edit" type="button" className="btn btn-primary" onClick={()=>handleEdit(a._id)}><i className="bi bi-pen-fill"></i></button></Link>
+                        <Link to={`/view/${a._id}`}><button data-tooltip-id="view" data-tooltip-content="View" type="button" className="btn btn-warning" onClick={()=>handleView(a._id)}><i className="fa-solid fa-eye"></i></button></Link>
+                        <button type="button" data-tooltip-id="delete" data-tooltip-content="Delete" className="btn btn-danger" onClick={()=>handleDelete(a._id)}><i className="bi bi-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+                })}
+                </tbody>
+    
+            </table>
+            </div>
+            <Tooltip id="edit" style={{padding:"2px",borderRadius:"20px"}}/>
+        <Tooltip id="view" style={{backgroundColor:"yellow",color:"black",padding:"2px",borderRadius:"20px"}}/>
+        <Tooltip id="delete" style={{backgroundColor:"red",color:"white",padding:"2px",borderRadius:"20px"}}/>
+
+    <Footer/>
+    </div>
+  
+    </div>
+    </div>
+    </div>
+ 
+
+    <Tooltip id="create" style={{backgroundColor:"lightgreen",color:"black",fontWeight:"bolder",padding:"3px",borderRadius:"20px"}}/>
+    </>
+    )
+
+}
+export default Home;
